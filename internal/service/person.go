@@ -15,7 +15,7 @@ func NewPersonService(repo repository.PersonRepository) *personServiceImpl {
 	}
 }
 
-func (s personServiceImpl) Create(request model.PersonCreateRequest) (*model.Person, error) {
+func (s *personServiceImpl) Create(request model.PersonCreateRequest) (*model.Person, error) {
 	newPerson := model.Person{
 		Name: request.Name,
 		Surname: request.Surname,
@@ -30,14 +30,14 @@ func (s personServiceImpl) Create(request model.PersonCreateRequest) (*model.Per
 	return response, nil
 }
 
-func (s personServiceImpl) List(request model.PersonListRequest) ([]model.Person, error) {
+func (s *personServiceImpl) List(request model.PersonListRequest) ([]model.Person, error) {
 	return nil, nil
 }
 
-func (s personServiceImpl) Update(request model.PersonUpdateRequest) (*model.Person, error) {
+func (s *personServiceImpl) Update(request model.PersonUpdateRequest) (*model.Person, error) {
 	return nil, nil
 }
 
-func (s personServiceImpl) DeleteByID(id int) error {
+func (s *personServiceImpl) DeleteByID(id int) error {
 	return nil
 }
