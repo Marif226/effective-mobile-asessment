@@ -16,7 +16,7 @@ func NewPersonPostgresRepository(db *sql.DB) *personRepositoryImpl {
 	}
 }
 
-func (r personRepositoryImpl) Create(request model.PersonCreateRequest) (*model.Person, error) {
+func (r personRepositoryImpl) Create(request model.Person) (*model.Person, error) {
 	return nil, nil
 }
 

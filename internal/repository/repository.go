@@ -7,7 +7,7 @@ import (
 )
 
 type PersonRepository interface {
-	Create(request model.PersonCreateRequest) (*model.Person, error)
+	Create(request model.Person) (*model.Person, error)
 	List(request model.PersonListRequest) ([]model.Person, error)
 	Update(request model.PersonUpdateRequest) (*model.Person, error)
 	DeleteByID(id int) error
