@@ -1,6 +1,11 @@
 package service
 
 import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+
 	"github.com/Marif226/effective-mobile-assessment/internal/model"
 	"github.com/Marif226/effective-mobile-assessment/internal/repository"
 )
@@ -16,10 +21,37 @@ func NewPersonService(repo repository.PersonRepository) *personServiceImpl {
 }
 
 func (s *personServiceImpl) Create(request model.PersonCreateRequest) (*model.Person, error) {
+	var enrichInfo model.EnrichInfo
+	err := enrichAPI(&enrichInfo, "https://api.agify.io/", request.Name)
+	if err != nil {
+		return nil, err
+	}
+	err = enrichAPI(&enrichInfo, "https://api.genderize.io/", request.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	err = enrichAPI(&enrichInfo, "https://api.nationalize.io/", request.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	maxProb := 0.0
+	nation := ""
+	for _, c := range enrichInfo.Country {
+		if c.Probability > maxProb {
+			maxProb = c.Probability
+			nation = c.CountryID
+		}
+	}
+
 	newPerson := model.Person{
 		Name: request.Name,
 		Surname: request.Surname,
 		Patronymic: request.Patronymic,
+		Age: enrichInfo.Age,
+		Gender: enrichInfo.Gender,
+		Nationality: nation,
 	}
 
 	response, err := s.repo.Create(newPerson)
@@ -39,5 +71,24 @@ func (s *personServiceImpl) Update(request model.PersonUpdateRequest) (*model.Pe
 }
 
 func (s *personServiceImpl) DeleteByID(id int) error {
+	return nil
+}
+
+func enrichAPI(enrichInfo *model.EnrichInfo, api string, name string) error {
+	path := fmt.Sprintf("%s?name=%s", api, name)
+	apiResp, err := http.Get(path)
+	if err != nil {
+		return err
+	}
+	defer apiResp.Body.Close()
+
+
+	respBody, err := io.ReadAll(apiResp.Body)
+	if err != nil {
+		return err
+	}
+
+	json.Unmarshal(respBody, enrichInfo)
+
 	return nil
 }

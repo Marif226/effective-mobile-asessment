@@ -16,8 +16,8 @@ type Service struct {
 	PersonService
 }
 
-func New(repos *repository.Repository) *Service {
+func New(repo *repository.Repository) *Service {
 	return &Service{
-		PersonService: nil,
+		PersonService: NewPersonService(repo),
 	}
 }
