@@ -6,7 +6,7 @@ type Person struct {
 	Patronymic	string	`json:"patronymic"`
 	Age 		int		`json:"age"`	
 	Gender 		string	`json:"gender"`
-	Nationality	string	`json:"nationality"`
+	Country		string	`json:"nationality"`
 }
 
 type PersonCreateRequest struct {
@@ -25,7 +25,7 @@ type PersonUpdateRequest struct {
 	Patronymic	string
 	Age 		int	
 	Gender 		string
-	Nationality	string
+	Country		string
 }
 
 type EnrichInfo struct {

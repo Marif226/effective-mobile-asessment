@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-
 	"github.com/Marif226/effective-mobile-assessment/internal/model"
 	"github.com/Marif226/effective-mobile-assessment/internal/repository"
 )
@@ -37,11 +36,11 @@ func (s *personServiceImpl) Create(request model.PersonCreateRequest) (*model.Pe
 	}
 
 	maxProb := 0.0
-	nation := ""
+	country := ""
 	for _, c := range enrichInfo.Country {
 		if c.Probability > maxProb {
 			maxProb = c.Probability
-			nation = c.CountryID
+			country = c.CountryID
 		}
 	}
 
@@ -51,7 +50,7 @@ func (s *personServiceImpl) Create(request model.PersonCreateRequest) (*model.Pe
 		Patronymic: request.Patronymic,
 		Age: enrichInfo.Age,
 		Gender: enrichInfo.Gender,
-		Nationality: nation,
+		Country: country,
 	}
 
 	response, err := s.repo.Create(newPerson)
