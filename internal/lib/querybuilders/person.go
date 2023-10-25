@@ -27,6 +27,46 @@ func BuildPersonCreateQuery(request model.Person) (string, []any, error) {
 	return queryBuilder.ToSql()
 }
 
+func BuildPersonUpdateQuery(request model.PersonUpdateRequest) (string, []any, error) {
+	setMap := make(map[string]any)
+
+	if request.Age > 0 {
+		setMap["age"] = request.Age
+	}
+
+	if request.Country != "" {
+		setMap["country"] = request.Country
+	}
+
+	if request.Gender != "" {
+		setMap["gender"] = request.Gender
+	}
+
+	if request.Name != "" {
+		setMap["name"] = request.Name
+	}
+
+	if request.Patronymic != "" {
+		setMap["patronymic"] = request.Patronymic
+	}
+
+	if request.Surname != "" {
+		setMap["surname"] = request.Surname
+	}
+
+	queryBuilder := sq.Update(
+		"people",
+	).SetMap(
+		setMap,
+	).Where(
+		sq.Eq{"id": request.ID},
+	).Suffix(
+		"RETURNING *",
+	).PlaceholderFormat(sq.Dollar)
+
+	return queryBuilder.ToSql()
+}
+
 func BuildPersonDeleteByIDQuery(id int) (string, []any, error) {
 	queryBuilder := sq.Delete(
 		"people",

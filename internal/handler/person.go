@@ -36,6 +36,31 @@ func (h *Handler) createPerson(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+func (h *Handler) updatePerson(w http.ResponseWriter, r *http.Request) {
+	var request model.PersonUpdateRequest
+	err := helpers.BindRequestJSON(r, &request)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = validator.Validate(request)
+	if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+    }
+
+	response, err := h.services.PersonService.Update(request)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(response)
+}
+
 func (h *Handler) deletePersonByID(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {

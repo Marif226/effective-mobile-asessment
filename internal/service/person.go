@@ -68,7 +68,12 @@ func (s *personServiceImpl) List(request model.PersonListRequest) ([]model.Perso
 }
 
 func (s *personServiceImpl) Update(request model.PersonUpdateRequest) (*model.Person, error) {
-	return nil, nil
+	response, err := s.repo.Update(request)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 func (s *personServiceImpl) DeleteByID(idStr string) error {

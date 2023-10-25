@@ -47,7 +47,27 @@ func (r *personRepositoryImpl) List(request model.PersonListRequest) ([]model.Pe
 }
 
 func (r *personRepositoryImpl) Update(request model.PersonUpdateRequest) (*model.Person, error) {
-	return nil, nil
+	query, args, err := querybuilders.BuildPersonUpdateQuery(request)
+	if err != nil {
+		return nil, err
+	}
+
+	row := r.db.QueryRow(query, args...)
+	var person model.Person
+	s := reflect.ValueOf(&person).Elem()
+	numCols := s.NumField()
+	columns := make([]interface{}, numCols)
+	for i := 0; i < numCols; i++ {
+		field := s.Field(i)
+		columns[i] = field.Addr().Interface()
+	}
+
+	err = row.Scan(columns...)
+	if err != nil {
+		return nil, err
+	}
+
+	return &person, nil
 }
 
 func (r *personRepositoryImpl) DeleteByID(id int) error {

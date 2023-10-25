@@ -22,12 +22,12 @@ type PersonListRequest struct {
 
 type PersonUpdateRequest struct {
 	ID			int		`json:"id" validate:"nonzero"`
-	Name		string	`json:"chungachanga"`
-	Surname		string
-	Patronymic	string
-	Age 		int	
-	Gender 		string
-	Country		string
+	Name		string	`json:"name"`
+	Surname		string	`json:"surname"`
+	Patronymic	string	`json:"patronymic"`
+	Age 		int		`json:"age"`	
+	Gender 		string	`json:"gender"`
+	Country		string	`json:"nationality"`
 }
 
 type EnrichInfo struct {
