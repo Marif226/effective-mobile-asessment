@@ -1,5 +1,5 @@
 CREATE TABLE people (
-    id          int     PRIMARY KEY,
+    id          serial     PRIMARY KEY,
     name        varchar(50),
     surname     varchar(50),
     patronymic  varchar(50),

@@ -2,7 +2,9 @@ package repository
 
 import (
 	"database/sql"
+	"reflect"
 
+	"github.com/Marif226/effective-mobile-assessment/internal/lib/querybuilders"
 	"github.com/Marif226/effective-mobile-assessment/internal/model"
 )
 
@@ -17,7 +19,27 @@ func NewPersonPostgresRepository(db *sql.DB) *personRepositoryImpl {
 }
 
 func (r *personRepositoryImpl) Create(request model.Person) (*model.Person, error) {
-	return nil, nil
+	query, args, err := querybuilders.BuildPersonCreateQuery(request)
+	if err != nil {
+		return nil, err
+	}
+
+	row := r.db.QueryRow(query, args...)
+	var newPerson model.Person
+	s := reflect.ValueOf(&newPerson).Elem()
+	numCols := s.NumField()
+	columns := make([]interface{}, numCols)
+	for i := 0; i < numCols; i++ {
+		field := s.Field(i)
+		columns[i] = field.Addr().Interface()
+	}
+
+	err = row.Scan(columns...)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newPerson, nil
 }
 
 func (r *personRepositoryImpl) List(request model.PersonListRequest) ([]model.Person, error) {
