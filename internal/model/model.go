@@ -11,9 +11,9 @@ type Person struct {
 }
 
 type PersonCreateRequest struct {
-	Name		string
-	Surname		string
-	Patronymic	string
+	Name		string	`json:"name" validate:"nonzero"`
+	Surname		string	`json:"surname" validate:"nonzero"`
+	Patronymic	string	`json:"patronymic"`
 }
 
 type PersonListRequest struct {
@@ -21,7 +21,8 @@ type PersonListRequest struct {
 }
 
 type PersonUpdateRequest struct {
-	Name		string
+	ID			int		`json:"id" validate:"nonzero"`
+	Name		string	`json:"chungachanga"`
 	Surname		string
 	Patronymic	string
 	Age 		int	

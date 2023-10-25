@@ -8,6 +8,7 @@ import (
 	"github.com/Marif226/effective-mobile-assessment/internal/model"
 	"github.com/Marif226/effective-mobile-assessment/pkg/helpers"
 	"github.com/go-chi/chi/v5"
+	"gopkg.in/validator.v2"
 )
 
 func (h *Handler) createPerson(w http.ResponseWriter, r *http.Request) {
@@ -18,10 +19,11 @@ func (h *Handler) createPerson(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if request.Name == "" || request.Surname == "" {
-		http.Error(w, errors.New("error: empty fields").Error(), http.StatusBadRequest)
+	err = validator.Validate(request)
+	if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
 		return
-	}
+    }
 
 	response, err := h.services.PersonService.Create(request)
 	if err != nil {
