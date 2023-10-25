@@ -51,5 +51,15 @@ func (r *personRepositoryImpl) Update(request model.PersonUpdateRequest) (*model
 }
 
 func (r *personRepositoryImpl) DeleteByID(id int) error {
+	query, args, err := querybuilders.BuildPersonDeleteByIDQuery(id)
+	if err != nil {
+		return err
+	}
+
+	row := r.db.QueryRow(query, args...)
+	if row.Err() != nil {
+		return row.Err()
+	}
+
 	return nil
 }

@@ -26,3 +26,13 @@ func BuildPersonCreateQuery(request model.Person) (string, []any, error) {
 
 	return queryBuilder.ToSql()
 }
+
+func BuildPersonDeleteByIDQuery(id int) (string, []any, error) {
+	queryBuilder := sq.Delete(
+		"people",
+	).Where(
+		sq.Eq{"id": id},
+	).PlaceholderFormat(sq.Dollar)
+
+	return queryBuilder.ToSql()
+}

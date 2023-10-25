@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
+
 	"github.com/Marif226/effective-mobile-assessment/internal/model"
 	"github.com/Marif226/effective-mobile-assessment/internal/repository"
 )
@@ -69,7 +71,17 @@ func (s *personServiceImpl) Update(request model.PersonUpdateRequest) (*model.Pe
 	return nil, nil
 }
 
-func (s *personServiceImpl) DeleteByID(id int) error {
+func (s *personServiceImpl) DeleteByID(idStr string) error {
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return err
+	}
+
+	err = s.repo.DeleteByID(id)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

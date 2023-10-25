@@ -9,7 +9,7 @@ type PersonService interface {
 	Create(request model.PersonCreateRequest) (*model.Person, error)
 	List(request model.PersonListRequest) ([]model.Person, error)
 	Update(request model.PersonUpdateRequest) (*model.Person, error)
-	DeleteByID(id int) error
+	DeleteByID(id string) error
 }
 
 type Service struct {
