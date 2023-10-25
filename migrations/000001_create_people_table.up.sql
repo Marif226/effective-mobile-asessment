@@ -4,6 +4,6 @@ CREATE TABLE people (
     surname     varchar(50),
     patronymic  varchar(50),
     age         int,
-    gender      varchar(5),
+    gender      varchar(10),
     country     varchar(50)
 );
