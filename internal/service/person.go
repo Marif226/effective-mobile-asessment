@@ -64,7 +64,12 @@ func (s *personServiceImpl) Create(request model.PersonCreateRequest) (*model.Pe
 }
 
 func (s *personServiceImpl) List(request model.PersonListRequest) ([]model.Person, error) {
-	return nil, nil
+	response, err := s.repo.List(request)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 func (s *personServiceImpl) Update(request model.PersonUpdateRequest) (*model.Person, error) {

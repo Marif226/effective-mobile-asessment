@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-
+	"github.com/Marif226/effective-mobile-assessment/internal/lib/parsers"
 	"github.com/Marif226/effective-mobile-assessment/internal/model"
 	"github.com/Marif226/effective-mobile-assessment/pkg/helpers"
 	"github.com/go-chi/chi/v5"
@@ -33,6 +33,25 @@ func (h *Handler) createPerson(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(response)
+}
+
+func (h *Handler) listPeople(w http.ResponseWriter, r *http.Request) {
+	request, err := parsers.ParsePersonListRequest(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	
+
+	response, err := h.services.PersonService.List(*request)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
 }
 

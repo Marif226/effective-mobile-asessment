@@ -20,6 +20,7 @@ func (h *Handler) InitRoutes() *chi.Mux {
 
 	router.Route("/people", func(r chi.Router) {
 		r.Post("/", h.createPerson)
+		r.Get("/", h.listPeople)
 		r.Put("/", h.updatePerson)
 		r.Delete("/{id}", h.deletePersonByID)
 	})

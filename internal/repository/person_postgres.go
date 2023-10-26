@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"reflect"
-
 	"github.com/Marif226/effective-mobile-assessment/internal/lib/querybuilders"
 	"github.com/Marif226/effective-mobile-assessment/internal/model"
 )
@@ -43,7 +42,36 @@ func (r *personRepositoryImpl) Create(request model.Person) (*model.Person, erro
 }
 
 func (r *personRepositoryImpl) List(request model.PersonListRequest) ([]model.Person, error) {
-	return nil, nil
+	query, args, err := querybuilders.BuildPersonListQuery(request)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := r.db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	people := make([]model.Person, 0)
+	for rows.Next() {
+		var person model.Person
+		s := reflect.ValueOf(&person).Elem()
+		numCols := s.NumField()
+		columns := make([]interface{}, numCols)
+		for i := 0; i < numCols; i++ {
+			field := s.Field(i)
+			columns[i] = field.Addr().Interface()
+		}
+
+		err = rows.Scan(columns...)
+		if err != nil {
+			return nil, err
+		}
+
+		people = append(people, person)
+	}
+
+	return people, nil
 }
 
 func (r *personRepositoryImpl) Update(request model.PersonUpdateRequest) (*model.Person, error) {

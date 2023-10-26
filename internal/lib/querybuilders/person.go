@@ -27,6 +27,40 @@ func BuildPersonCreateQuery(request model.Person) (string, []any, error) {
 	return queryBuilder.ToSql()
 }
 
+func BuildPersonListQuery(request model.PersonListRequest) (string, []any, error) {
+	queryBuilder := sq.Select(
+		"p.id",
+		"p.name",
+		"p.surname",
+		"p.patronymic",
+		"p.age",
+		"p.gender",
+		"p.country",
+	).From(
+		"people AS p",
+	).PlaceholderFormat(sq.Dollar)
+
+	if request.Age > 0 {
+		queryBuilder = queryBuilder.Where(
+			sq.Eq{"age": request.Age},
+		)
+	}
+
+	if request.Country != "" {
+		queryBuilder = queryBuilder.Where(
+			sq.Eq{"country": request.Country},
+		)
+	}
+
+	if request.Gender != "" {
+		queryBuilder = queryBuilder.Where(
+			sq.Eq{"gender": request.Gender},
+		)
+	}
+
+	return queryBuilder.ToSql()
+}
+
 func BuildPersonUpdateQuery(request model.PersonUpdateRequest) (string, []any, error) {
 	setMap := make(map[string]any)
 
