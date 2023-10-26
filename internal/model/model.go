@@ -17,9 +17,13 @@ type PersonCreateRequest struct {
 }
 
 type PersonListRequest struct {
-	Age			int
-	Country 	string
-	Gender		string
+	// pagination settings
+	Offset	int			
+	Limit	int
+	
+	Age		int
+	Country	string
+	Gender	string
 }
 
 type PersonUpdateRequest struct {

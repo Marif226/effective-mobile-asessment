@@ -23,7 +23,25 @@ func ParsePersonListRequest(r *http.Request) (*model.PersonListRequest, error) {
 		request.Age = age
 	}
 
-	
+	offsetStr := r.URL.Query().Get("offset")
+	if offsetStr != "" {
+		offset, err := strconv.Atoi(offsetStr)
+		if err != nil {
+			return nil, err
+		}
+
+		request.Offset = offset
+	}
+
+	limitStr := r.URL.Query().Get("limit")
+	if limitStr != "" {
+		limit, err := strconv.Atoi(limitStr)
+		if err != nil {
+			return nil, err
+		}
+
+		request.Limit = limit
+	}
 
 	return request, nil
 }

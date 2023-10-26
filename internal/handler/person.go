@@ -43,7 +43,6 @@ func (h *Handler) listPeople(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-
 	response, err := h.services.PersonService.List(*request)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

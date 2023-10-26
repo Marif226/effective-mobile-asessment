@@ -46,6 +46,18 @@ func BuildPersonListQuery(request model.PersonListRequest) (string, []any, error
 		)
 	}
 
+	if request.Limit > 0 {
+		queryBuilder = queryBuilder.Limit(
+			uint64(request.Limit),
+		)
+	}
+
+	if request.Offset > 0 {
+		queryBuilder = queryBuilder.Offset(
+			uint64(request.Offset),
+		)
+	}
+
 	if request.Country != "" {
 		queryBuilder = queryBuilder.Where(
 			sq.Eq{"country": request.Country},
@@ -57,6 +69,7 @@ func BuildPersonListQuery(request model.PersonListRequest) (string, []any, error
 			sq.Eq{"gender": request.Gender},
 		)
 	}
+	
 
 	return queryBuilder.ToSql()
 }
